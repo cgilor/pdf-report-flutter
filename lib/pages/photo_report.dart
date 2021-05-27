@@ -11,11 +11,13 @@ class PhotoReport extends StatefulWidget {
 }
 
 class _PhotoReportState extends State<PhotoReport> {
+  final photos = [];
+  //List<Map<String, dynamic>> photos = [];
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController descriptionCtrl = new TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  File? _imageFile;
+  PickedFile? _imageFile;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,15 +87,17 @@ class _PhotoReportState extends State<PhotoReport> {
     save();
     formKey.currentState!.save();
 
-    Navigator.of(context).pop();
+    Navigator.pop(context);
   }
 
   void save() async {
-    final photos = new ImagePdf(
+    final photo = new ImagePdf(
         path: _imageFile!.path.toString(),
         description: descriptionCtrl.text,
         createdTime: DateTime.now());
-    await PdfDatabase.instance.create(photos);
+    await PdfDatabase.instance.create(photo);
+    /*photos.add(photo);
+    print(photos);*/
     //print(descriptionCtrl.text);
     //print(photos);
     //keyForm.currentState.reset();
@@ -108,10 +112,10 @@ class _PhotoReportState extends State<PhotoReport> {
         height: 300.0,
       );
     } else {
-      return Image.file(
-        _imageFile!,
+      return Image(
+        image: FileImage(File(_imageFile!.path)),
         fit: BoxFit.cover,
-        height: 200.0,
+        height: 300.0,
       );
     }
   }
@@ -128,7 +132,7 @@ class _PhotoReportState extends State<PhotoReport> {
     final pickedFile = await _picker.getImage(source: origen);
 
     setState(() {
-      _imageFile = File(pickedFile!.path);
+      _imageFile = PickedFile(pickedFile!.path);
     });
   }
 }

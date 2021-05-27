@@ -104,6 +104,12 @@ CREATE TABLE $tableImages (
     );
   }
 
+  Future<int> deleteAllScans() async {
+    final db = await instance.database;
+    final res = await db.delete(tableImages);
+    return res;
+  }
+
   Future close() async {
     final db = await instance.database;
 

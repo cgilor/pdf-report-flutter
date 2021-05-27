@@ -11,8 +11,8 @@ class ImageFields {
 
 class ImagePdf {
   final int? id;
-  final String path;
-  final String description;
+  final String? path;
+  final String? description;
   final DateTime createdTime;
 
   const ImagePdf({
